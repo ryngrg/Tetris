@@ -64,12 +64,13 @@ def dispBoard():
 pieces=[2,3,4,5,6,7,8,2,3,4,5,6,7,8]
 random.shuffle(pieces)
 
-def newpiece():
+def newpiece(piece=None):
     global pieces
     if pieces==[]:
         pieces=[2,3,4,5,6,7,8,2,3,4,5,6,7,8]
         random.shuffle(pieces)
-    piece = pieces.pop()
+    if piece==None:
+        piece = pieces.pop()
     global currentpiece
     currentpiece = piece
     a = random.randint(0,7)
@@ -397,8 +398,16 @@ def rotate():
                     board[x+1][i-1]=0
                 return None
 
+
+textFont = pygame.font.Font('freesansbold.ttf',15)
+rightSurf=[]
+rightRect=[]
+rightpanel=["CONTROLS","(Arrow keys)","left: move left","right: move right" ,"up: rotate piece","down: hard drop"]
+for i in range(len(rightpanel)):
+    rightSurf += [textFont.render(rightpanel[i], True, black)]
+    rightRect += [rightSurf[i].get_rect()]
+    rightRect[i].center = (400,18*i+30)
 t=0
-largeText = pygame.font.Font('freesansbold.ttf',15)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -421,14 +430,18 @@ while True:
     clearline()
     dispBoard()
     dispGrid()
-    txt="Score: "+str(score)+" Lines cleared: "+str(linesCleared)
-    TextSurf = largeText.render(txt, True, black)
-    TextRect = TextSurf.get_rect()
-    TextRect.center = (150,625)
-    gameDisplay.blit(TextSurf, TextRect)
+    
+    scoreText="Score: "+str(score)+" Lines cleared: "+str(linesCleared)
+    scoreTextSurf = textFont.render(scoreText, True, black)
+    scoreTextRect = scoreTextSurf.get_rect()
+    scoreTextRect.center = (150,625)
+    gameDisplay.blit(scoreTextSurf, scoreTextRect)
+    for i in range(len(rightpanel)):
+        gameDisplay.blit(rightSurf[i], rightRect[i])
     pygame.display.update()
+
     if 1 in board[0]:
-        print("\ngame over,\nLines cleared:", linesCleared)
+        print("\ngame over!\nLines cleared:", linesCleared)
         print("Score:", score, "\n")
         break;
     t+=1
