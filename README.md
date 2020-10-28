@@ -1,2 +1,2 @@
 # Tetris
-The game of tetris
+Recreating the game: tetris
